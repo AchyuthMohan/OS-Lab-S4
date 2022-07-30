@@ -1,24 +1,20 @@
 #include<stdio.h>
-#define max 20
-
-int pr[max],bt[max],p[max],wt[0],tat[0];
+#include<stdlib.h>
+#define size 30
 int main(){
-    int n;
-    int  awt=0,avgtat=0,totalwt=0,total_tat=0;
-    printf("Enter the number of processes: ");
+    int p[size],bt[size],wt[size],tat[size],pr[size],n,total_tat=0,total_wt=0,avg_wt,avg_tat;
+    printf("Enter the number  of processes: \n");
     scanf("%d",&n);
     for(int i=0;i<n;i++){
-        printf("Enter the priority and  burst time of p[%d]\n",i+1);
-        printf("Enter the priority: \n");
+        printf("Enter the priority for p[%d]: ",i+1);
         scanf("%d",&pr[i]);
-        printf("Enter the nurst time: \n");
+        printf("Enter the burst time for p[%d]: ",i+1);
         scanf("%d",&bt[i]);
         p[i]=i+1;
     }
     for(int i=0;i<n;i++){
-        int min=pr[i];
         for(int j=i+1;j<n;j++){
-            if(pr[j]<min){
+            if(pr[i]>pr[j]){
                 int temp=pr[i];
                 pr[i]=pr[j];
                 pr[j]=temp;
@@ -30,42 +26,33 @@ int main(){
                 temp=bt[i];
                 bt[i]=bt[j];
                 bt[j]=temp;
+
             }
         }
     }
     for(int i=0;i<n;i++){
-        printf("p[%d]--->%d\n",i+1,p[i]);
-    }
-    wt[0]=0;
-    for(int i=1;i<n;i++){
         wt[i]=0;
-        for(int j=0;j<i;j++){
-            wt[i]+=wt[j];
-        }
-        // totalwt+=wt[i];
     }
-    
-    // printf("Total wt: %d",totalwt);
-    // awt=(float)totalwt/(float)n;
-    // for(int i=0;i<n;i++){
-    //     tat[i]=bt[i]+wt[i];
-    //     total_tat+=tat[i];
-    // }
-    // avgtat=(float)total_tat/(float)n;
-    // printing
+
+    for(int i=1;i<n;i++){
+        for(int j=0;j<i;j++){
+            wt[i]+=bt[j];
+        }
+        total_wt+=wt[i];
+    }
+
+    for(int i=0;i<n;i++){
+        tat[i]=wt[i]+bt[i];
+        total_tat+=tat[i];
+    }
+    avg_tat=total_tat/n;
+    avg_wt=total_wt/n;
     printf("Process\t\t\tburst time\t\t\tturn around time\t\t\twait time\n");
     for(int i=0;i<n;i++){
         printf("%d\t\t\t%d\t\t\t%d\t\t\t%d\n",p[i],bt[i],tat[i],wt[i]);
 
     }
-    for(int i=0;i<n;i++){
-        total_tat+=(float)tat[i];
-        totalwt+=(float)wt[i];
-    }
-    avgtat=total_tat/(float)n;
-    awt=totalwt/(float)n;
-    printf("Average wait time: %d\n",awt);
-    printf("Average turn around time: %d",avgtat);
-    
+     printf("Average wait time: %d\n",avg_wt);
+    printf("Average turn around time: %d",avg_tat);
 
 }
