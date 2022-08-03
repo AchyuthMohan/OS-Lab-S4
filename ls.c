@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<dirent.h>
+#include<string.h>
 #define DATA_SIZE 1000
 void lsandgrep(){
  char fn[10],pat[10],temp[200];
@@ -9,7 +10,8 @@ char dirname[10];
 DIR*p;
 struct dirent *d;
 printf("Enter directory name\n");
-scanf("%s",dirname);
+// scanf("%s",dirname);
+gets(dirname);
 p=opendir(dirname);
 if(p==NULL)
   {

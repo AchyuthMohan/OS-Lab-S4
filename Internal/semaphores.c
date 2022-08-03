@@ -1,49 +1,49 @@
 #include<stdio.h>
 #include<stdlib.h>
 int mutex=1,full=3,empty=0;
-int wait(int s){
-    return (--s);
-}
 int signal(int s){
-    return(++s);
+    return ++s;
+}
+int wait(int s){
+    return --s;
 }
 void producer(){
     mutex=wait(mutex);
     full=signal(full);
+    printf("Producer added one product...");
     empty=wait(empty);
-    printf("Producer added a new product\n");
     mutex=signal(mutex);
+
 }
 void consumer(){
     mutex=wait(mutex);
     full=wait(full);
-    empty=wait(empty);
-    printf("Consumer consumed a product\n");
+    empty=signal(empty);
+    printf("Consumer purchased one product..");
     mutex=signal(mutex);
 }
 int main(){
-    int state=0,n;
+    int state=0;
     while(state==0){
-        printf("1. Producer 2. Consumer 3. exit\n");
-        scanf("%d",&n);
-        switch(n){
+        printf("1. producer  2.Consumer 3.exit");
+        int ch;
+        scanf("%d",&ch);
+        switch(ch){
             case 1:{
-                if(((mutex==1)&&(empty!=0))){
+                if(mutex==1&&empty!=0){
                     producer();
-
                 }
                 else{
-                    printf("Buffer is full!!\n");
+                    printf("Buffer is full");
                 }
                 break;
             }
             case 2:{
-                if((mutex==1)&&(full!=0)){
+                if(mutex==1&&full!=0){
                     consumer();
-
                 }
                 else{
-                    printf("Buffer is empty\n");
+                    printf("Buffer is empty");
                 }
                 break;
             }
@@ -53,6 +53,5 @@ int main(){
             }
         }
     }
-    return 0;
 
 }
