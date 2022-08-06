@@ -1,71 +1,69 @@
 #include<stdio.h>
-#include<stdlib.h>
-#define size 30
-
-
-int n, bt[size],tat[size],at[size],p[size],q;
-void sort(){
-    for(int i=0;i<n;i++){
-        for(int j=i+1;j<n;j++){
-            if(at[i]>at[j]){
-                int temp=at[i];
-                at[i]=at[j];
-                at[j]=temp;
-
-                temp=p[i];
-                p[i]=p[j];
-                p[j]=temp;
-
-                temp=bt[i];
-                bt[i]=bt[j];
-                bt[j]=temp;
+ 
+int main()
+{
+      int i, limit, total = 0, x, counter = 0, time_quantum;
+      int wait_time = 0, turnaround_time = 0, arrival_time[10], burst_time[10], temp[10];
+      float average_wait_time, average_turnaround_time;
+      printf("\nEnter Total Number of Processes: ");
+      scanf("%d", &limit);
+      x = limit;
+      for(i = 0; i < limit; i++)
+      {
+            printf("\nEnter Details of Process[%d]n", i + 1);
+ 
+            printf("\nArrival Time:t");
+ 
+            scanf("%d", &arrival_time[i]);
+ 
+            printf("\nBurst Time:t");
+ 
+            scanf("%d", &burst_time[i]);
+ 
+            temp[i] = burst_time[i];
+      }
+ 
+      printf("\nEnter Time Quantum: ");
+      scanf("%d", &time_quantum);
+      printf("\nProcess ID \tBurst Time \t Turnaround Time \t Waiting Time \n");
+      for(total = 0, i = 0; x != 0;)
+      {
+            if(temp[i] <= time_quantum && temp[i] > 0)
+            {
+                  total = total + temp[i];
+                  temp[i] = 0;
+                  counter = 1;
             }
-        }
-    }
-}
-void addProcesses(){
-    printf("Enter the number of processes: ");
-    scanf("%d",&n);
-    for(int i=0;i<n;i++){
-        printf("Enter the burst time of p[%d]: ",i+1);
-        scanf("%d",&bt[i]);
-        printf("Enter the arrival time of p[%d]: ",i+1);
-        scanf("%d",&at[i]);
-    }
-}
-void execute(){
-    for(int i=0;i>=0;i++){
-        if(bt[i])
-        printf("process: %d --->",p[i]);
-        bt[i]=bt[i]-q;
-        if(bt[i]>0){
-            bt[n-1+i]=bt[i];
-            p[n-1+i]=p[i];
-        }
-    }
-}
-int main(){
-    int state=0;
-    int ch;
-    printf("Enter the time quantum: \n");
-    scanf("%d",&q);
-    while(state==0){
-        printf("1. add process 2. generate result 3. exit: \n");
-        scanf("%d",&ch);
-        switch(ch){
-            case 1:{
-                addProcesses();
-                sort();
-                break;
+            else if(temp[i] > 0)
+            {
+                  temp[i] = temp[i] - time_quantum;
+                  total = total + time_quantum;
             }
-            case 2:{
-                execute();
-                break;
+            if(temp[i] == 0 && counter == 1)
+            {
+                  x--;
+                  printf("\nProcess[%d]\t%d\t %d\t %d", i + 1, burst_time[i], total - arrival_time[i], total - arrival_time[i] - burst_time[i]);
+                  wait_time = wait_time + total - arrival_time[i] - burst_time[i];
+                  turnaround_time = turnaround_time + total - arrival_time[i];
+                  counter = 0;
             }
-            case 3:{
-                state=1;
-                break;
+            if(i == limit - 1)
+            {
+                  i = 0;
             }
-        }
-    }
+            else if(arrival_time[i + 1] <= total)
+            {
+                  i++;
+            }
+            else
+            {
+                  i = 0;
+            }
+      }
+ 
+      average_wait_time = wait_time * 1.0 / limit;
+      average_turnaround_time = turnaround_time * 1.0 / limit;
+      printf("\nAverage Waiting Time: %f", average_wait_time);
+      printf("\nAvg Turnaround Time: %f", average_turnaround_time);
+      return 0;
 }
