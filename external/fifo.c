@@ -20,6 +20,8 @@ int main(){
         scanf("%d",&processes[i]);
     }
     for(int i=0;i<p;i++){
+        
+        
         int flag=0;
         for(int j=0;j<f;j++){
             if(processes[i]==frames[j].pno){
@@ -39,12 +41,21 @@ int main(){
                 if(frames[k].index==min){
                     frames[k].index=i;
                     frames[k].pno=processes[i];
+                    break;
                 }
             }
+
+            printf("Status: ");
+             for(int x=0;x<f;x++){
+                printf("%d   ",frames[x].pno);
+            }
+            printf("\n");
+            
         }
         else{
            continue;
         }
     }
     printf("Miss: %d",miss);
+   
 }
