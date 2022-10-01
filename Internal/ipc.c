@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<sys/shm.h>
+#include<string.h>
 #include<sys/types.h>
 #include<sys/ipc.h>
 
@@ -17,6 +18,11 @@ int main(){
     read(0,buff,100);
     strcpy(shared_memory,buff);
     printf("Contents: %s",(char *)shared_memory);
-    
+    if(shmctl(shmid,IPC_RMID,0)==-1){
+        printf("error in deletion");
+    }
+    else{
+        printf("shared memory deleted succesfully");
+    }
     return 0;
 }
