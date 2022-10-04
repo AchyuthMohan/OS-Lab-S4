@@ -1,60 +1,51 @@
 #include<stdio.h>
-#define max 30
+#define max 40
 struct block{
     int bno;
     int size;
+    int is_alloc;
 };
-struct allocation{
-    int bno;
-    int pno;
+struct allocated{
+    int bno,pno;
 };
 int main(){
-    int b,p,bs[max],ps[max];
-    struct block blocks[max];
-    struct allocation alloc[max];
-    int counter=0;
-    int allocated[max],a=0;
-    printf("Enter the umber of processes: \n");
+    int b,p,counter=0;
+    struct allocated allocs[max];
+    printf("Enter the number of processes: \n");
     scanf("%d",&p);
+    int allocated[p],a=0;
     printf("Enter the number of blocks: \n");
     scanf("%d",&b);
-    printf("Enter the process sizes: \n");
+    struct block blocks[b];
+    int processes[p];
+    printf("Enter the size of processes: \n");
     for(int i=0;i<p;i++){
-        scanf("%d",&ps[i]);
+        scanf("%d",&processes[i]);
     }
-    printf("Enter the block sizes: \n");
-    for(int j=0;j<b;j++){
-        blocks[j].bno=j;
-        int t;
-        scanf("%d",&t);
-        blocks[j].size=t;
-    }
-    // sorting
+    printf("Enter the size of blocks: ");
     for(int i=0;i<b;i++){
-        for(int j=0;j<b;j++){
-            if(blocks[i].size>=blocks[j].size){
+        scanf("%d",&blocks[i].size);
+        blocks[i].bno=i;
+        blocks[i].is_alloc=0;
+    }
+    for(int i=0;i<b;i++){
+        for(int j=i+1;j<b;j++){
+            if(blocks[i].size>blocks[j].size){
                 struct block temp=blocks[i];
                 blocks[i]=blocks[j];
                 blocks[j]=temp;
             }
         }
+
     }
     for(int i=0;i<p;i++){
         for(int j=0;j<b;j++){
-            if(blocks[j].size>=ps[i]){
-                int flag=0;
-                for(int k=0;k<a;k++){
-                    if(blocks[j].bno==allocated[k]){
-                        flag=1;
-                        break;
-                    }
-                }
-                if(flag==0){
-                    alloc[counter].bno=blocks[j].bno;
-                    alloc[counter].pno=ps[i];
-                    allocated[a]=blocks[j].bno;
+            if(processes[i]<=blocks[j].size){
+                if(blocks[j].is_alloc==0){
+                    allocs[counter].bno=blocks[j].bno;
+                    allocs[counter].pno=processes[i];
                     counter++;
-                    a++;
+                    blocks[j].is_alloc=1;
                 }
             }
             else{
@@ -62,7 +53,9 @@ int main(){
             }
         }
     }
+    printf("Result: \n");
     for(int i=0;i<counter;i++){
-        printf("Block: %d----> Process: %d\n",alloc[i].bno,alloc[i].pno);
+        printf("Block: %d--->Process: %d\n",allocs[i].bno,allocs[i].pno);
     }
+
 }
