@@ -1,21 +1,23 @@
 #include<stdio.h>
-#define size 25
+#define size 35
 int main(){
-    int n,m,max[size][size],alloc[size][size],need[size][size],available[size],finish[size],work[size],safe[size];
+    int n,m,safe_seq[size];
     printf("Enter the number of processes: \n");
     scanf("%d",&n);
-    printf("Enter the number of resources: \n");
+    printf("Enter number of resources: \n");
     scanf("%d",&m);
+    printf("Enter the allocation matrix: \n");
+    int alloc[size][size],max[size][size],need[size][size],avail[size],work[size];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            scanf("%d",&alloc[i][j]);
+
+        }
+    }
     printf("Enter the max matrix: \n");
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
             scanf("%d",&max[i][j]);
-        }
-    }
-    printf("Enter the allocation matrix: \n");
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            scanf("%d",&alloc[i][j]);
         }
     }
     for(int i=0;i<n;i++){
@@ -27,44 +29,54 @@ int main(){
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
             printf("%d\t",need[i][j]);
-
         }
         printf("\n");
     }
     printf("Enter the available array: \n");
     for(int i=0;i<m;i++){
-        scanf("%d",&available[i]);
-    }
-    for(int i=0;i<n;i++){
-        finish[i]=0;
-
+        scanf("%d",&avail[i]);
     }
     for(int i=0;i<m;i++){
-        work[i]=available[i];
+        work[i]=avail[i];
     }
-    for(int k=0;k<n;k++){
+    int finish[size];
+    for(int i=0;i<n;i++){
+        finish[i]=0;
+    }
+    int counter=0;
+    int index=0;
+    while(counter!=n){
         for(int i=0;i<n;i++){
             if(finish[i]==0){
                 int flag=0;
                 for(int j=0;j<m;j++){
-                    if(need[i][j]>available[j]){
-                        flag=1;
+                    if(need[i][j]>work[j]){
+                        int flag=1;
                         break;
                     }
                 }
                 if(flag==0){
-                    safe[i]=i;
+                    finish[i]=1;
+                    counter++;
+                    safe_seq[index++]=i;
+                    for(int k=0;k<m;k++){
+                        work[k]+=alloc[i][k];
+                    }
+                    
 
                 }
-                for(int y=0;y<m;y++){
-                    work[y]+=alloc[i][y];
+                else{
+                    continue;
                 }
-                finish[i]=1;
+            }
+            else{
+                continue;
             }
         }
     }
-    printf("Safe sequence: \n");
-    for(int i=0;i<n;i++){
-        printf("%d--->",safe[i]);
-    }
+printf("Safe: ");
+for(int i=0;i<n;i++){
+    printf("%d\t",safe_seq[i]);
+}
+
 }
