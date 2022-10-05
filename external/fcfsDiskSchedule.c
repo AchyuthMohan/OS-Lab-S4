@@ -12,6 +12,7 @@ int main(){
     printf("Enter the initial head position: \n");
     scanf("%d",&initial);
     for(int i=0;i<n;i++){
+        printf("%d",rs[i]);
         result+=abs(rs[i]-initial);
         initial=rs[i];
     }
